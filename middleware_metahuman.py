@@ -61,7 +61,7 @@ async def send_realtime_audio(session):
         p.terminate()
 
 async def receive_and_process(session):
-    """Nhận phản hồi, lưu file WAV và nhấn phím M"""
+    """Nhận phản hồi, lưu file WAV và điều khiển animation theo độ dài audio"""
     full_audio = bytearray()
     
     try:
@@ -74,31 +74,44 @@ async def receive_and_process(session):
                             full_audio.extend(part.inline_data.data)
                 
                 if message.server_content and message.server_content.turn_complete:
-                    # Tối thiểu 0.5 giây audio (24000 Hz * 2 bytes * 0.5s = 24000 bytes)
                     MIN_AUDIO_BYTES = 24000
                     if len(full_audio) >= MIN_AUDIO_BYTES:
-                        # Ghi đè file WAV tại đường dẫn bạn đã thiết lập trong UE5
+                        # 1. Ghi đè file WAV
                         with wave.open(WAV_PATH, 'wb') as wf:
                             wf.setnchannels(1)
                             wf.setsampwidth(2)
                             wf.setframerate(24000) 
                             wf.writeframes(bytes(full_audio))
                         
-                        print(f"✅ Đã lưu file: {WAV_PATH} ({len(full_audio)//1000}KB)")
-                        # Giả lập phím M để kích hoạt Audio2Face trong Unreal Engine
-                        pyautogui.press('m')
+                        # 2. Tính toán độ dài audio (giây)
+                        # Công thức: Tổng số bytes / (Sample Rate * Bytes per Sample * Channels)
+                        # Ở đây: len(full_audio) / (24000 * 2 * 1)
+                        duration = len(full_audio) / 48000.0
+                        print(f"✅ Đã lưu file: {WAV_PATH} | ⏱️ Độ dài: {duration:.2f}s")
+                        
+                        # 3. Điều khiển Animation qua phím tắt
+                        print("🎬 Start Talking Animation (M)")
+                        pyautogui.press('m') 
+
+                        # Chạy task chờ và tắt animation mà không block việc nhận audio tiếp theo
+                        async def stop_anim_after_delay(delay):
+                            await asyncio.sleep(delay)
+                            pyautogui.press('n')
+                            print("🛑 Back to Idle Animation (N)")
+
+                        asyncio.create_task(stop_anim_after_delay(duration))
+
                     elif full_audio:
-                        print(f"⚠️ Bỏ qua audio quá ngắn ({len(full_audio)} bytes), có thể là turn_complete giả")
+                        print(f"⚠️ Bỏ qua audio quá ngắn ({len(full_audio)} bytes)")
+                    
                     full_audio = bytearray()
                 
-                # Print if there is text
                 try:
                     if getattr(message, "text", None):
                         print(f"🤖 AI: {message.text}")
                 except Exception:
                     pass
                 
-        print("⚠️ Cảnh báo: Vòng lặp nhận dữ liệu từ server đã kết thúc!")
     except Exception as e:
         print(f"Receive error: {e}")
 
