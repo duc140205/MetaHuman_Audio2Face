@@ -125,7 +125,15 @@ async def main():
         "speech_config": {
             "voice_config": {"prebuilt_voice_config": {"voice_name": "Fenrir"}}
         },
-        "response_modalities": ["AUDIO"]
+        "response_modalities": ["AUDIO"],
+        "realtime_input_config": {
+            # Gemini tự phát hiện đầu/cuối câu nói phía server
+            "automatic_activity_detection": {
+                "start_of_speech_sensitivity": "START_SENSITIVITY_HIGH",
+                "end_of_speech_sensitivity": "END_SENSITIVITY_HIGH",
+                "silence_duration_ms": 800,
+            },
+        },
     }
 
     async with client.aio.live.connect(model=MODEL_ID, config=config) as session:
