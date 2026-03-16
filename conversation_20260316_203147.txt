@@ -1,0 +1,26 @@
+============================================================
+  CONVERSATION LOG — Metahuman Sumadi
+  Session bắt đầu: 2026-03-16 20:31:47
+============================================================
+
+[20:32:08] Guest
+  Xin chào bạn yêu, giới thiệu cho tôi nghe nào.
+
+[20:32:08] Sumadi [WAVE]
+  Xin chào! Tôi là Sumadi, trợ lý ảo Metahuman từ FPT University. Tôi ở đây để hỗ trợ và trò chuyện với bạn.
+
+[20:32:32] Guest
+  Tôi tên là Đặng Nguyễn Phước Lộc, bạn hãy nhớ cái tên này nha.
+
+[20:32:32] Sumadi [SPEAK]
+  Chào Đặng Nguyễn Phước Lộc! Tôi đã nhớ tên bạn rồi đây. Bạn có cần tôi giúp điều gì trong không gian 3D này không?
+
+[20:33:05] Guest
+  Ok chào tạm biệt bạn nha. Mình đi ngủ nha.
+
+[20:33:05] Sumadi [WAVE]
+  Tạm biệt Lộc nhé! Chúc bạn ngủ ngon và hẹn gặp lại!
+
+============================================================
+  Session kết thúc: 2026-03-16 20:33:18
+============================================================
